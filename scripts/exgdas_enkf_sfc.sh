@@ -27,6 +27,9 @@ DONST=${DONST:-"NO"}
 GSI_SOILANAL=${GSI_SOILANAL:-"NO"}
 DOSFCANL_ENKF=${DOSFCANL_ENKF:-"YES"}
 export CASE=${CASE:-384}
+if [[ "${DO_NEST:-NO}" == "YES" && -n "${ntiles}" ]]; then
+   ntiles=$((ntiles - 1))
+fi
 ntiles=${ntiles:-6}
 
 # Utilities

@@ -40,11 +40,23 @@ FV3_postdet() {
     fv3_restart_files=(coupler.res fv_core.res.nc)
     tile_files=(fv_core.res fv_srf_wnd.res fv_tracer.res phy_data sfc_data ca_data)
     local nn tt
-    for (( nn = 1; nn <= ntiles; nn++ )); do
-      for tt in "${tile_files[@]}"; do
-        fv3_restart_files+=("${tt}.tile${nn}.nc")
+    if [[ "${DO_NEST:-NO}" == "YES" ]] ; then
+      for (( nn = 1; nn <= ntiles-1; nn++ )); do
+        for tt in "${tile_files[@]}"; do
+          fv3_restart_files+=("${tt}.tile${nn}.nc")
+        done
       done
-    done
+      for tt in "${tile_files[@]}"; do
+        fv3_restart_files+=("${tt}.nest02.tile${ntiles}.nc")
+      done
+      fv3_restart_files+=("fv_core.res.nest02.nc")
+    else
+      for (( nn = 1; nn <= ntiles; nn++ )); do
+        for tt in "${tile_files[@]}"; do
+          fv3_restart_files+=("${tt}.tile${nn}.nc")
+        done
+      done
+    fi
 
     # Determine restart date and directory containing restarts
     local restart_date restart_dir
@@ -233,11 +245,23 @@ FV3_out() {
   fv3_restart_files=(coupler.res fv_core.res.nc)
   tile_files=(fv_core.res fv_srf_wnd.res fv_tracer.res phy_data sfc_data ca_data)
   local nn tt
-  for (( nn = 1; nn <= ntiles; nn++ )); do
-    for tt in "${tile_files[@]}"; do
-      fv3_restart_files+=("${tt}.tile${nn}.nc")
+  if [[ "${DO_NEST:-NO}" == "YES" ]] ; then
+    for (( nn = 1; nn <= ntiles-1; nn++ )); do
+      for tt in "${tile_files[@]}"; do
+        fv3_restart_files+=("${tt}.tile${nn}.nc")
+      done
     done
-  done
+    for tt in "${tile_files[@]}"; do
+      fv3_restart_files+=("${tt}.nest02.tile${ntiles}.nc")
+    done
+    fv3_restart_files+=("fv_core.res.nest02.nc")
+  else
+    for (( nn = 1; nn <= ntiles; nn++ )); do
+      for tt in "${tile_files[@]}"; do
+        fv3_restart_files+=("${tt}.tile${nn}.nc")
+      done
+    done
+  fi
 
   # Copy restarts in the assimilation window for RUN=gdas|enkfgdas|enkfgfs
   if [[ "${RUN}" =~ "gdas" || "${RUN}" == "enkfgfs" ]]; then
@@ -249,6 +273,11 @@ FV3_out() {
         restart_file="${restart_date:0:8}.${restart_date:8:2}0000.${fv3_restart_file}"
         ${NCP} "${DATArestart}/FV3_RESTART/${restart_file}" \
                "${COM_ATMOS_RESTART}/${restart_file}"
+	if [[ "${DO_NEST:-NO}" == "YES" && "${restart_file}" == *"tile7"* ]] ; then
+	  nest_tile_file="${restart_file//nest02\./}"
+	  ${NCP} "${DATArestart}/FV3_RESTART/${restart_file}" \
+	       "${COM_ATMOS_RESTART}/${nest_tile_file}"
+        fi
       done
       restart_date=$(date --utc -d "${restart_date:0:8} ${restart_date:8:2} + ${restart_interval} hours" +%Y%m%d%H)
     done

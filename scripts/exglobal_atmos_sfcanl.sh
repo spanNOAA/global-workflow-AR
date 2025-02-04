@@ -55,6 +55,9 @@ export DELTSFC=${DELTSFC:-6}
 
 # FV3 specific info (required for global_cycle)
 export CASE=${CASE:-"C384"}
+if [[ "${DO_NEST:-NO}" == "YES" && -n "${ntiles}" ]]; then
+   ntiles=$((ntiles - 1))
+fi
 ntiles=${ntiles:-6}
 
 # IAU

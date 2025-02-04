@@ -346,6 +346,8 @@ export WRTTASK_PER_GROUP_PER_THREAD_GFS
 (( ntasks_fv3_gfs = layout_x_gfs * layout_y_gfs * 6 ))
 if [[ "${DO_NEST:-NO}" == "YES" ]] ; then
   (( ntasks_fv3_gfs += layout_x_nest * layout_y_nest ))
+  # add for GDAS, not sure if this would affect other gdas tasks
+  (( ntasks_fv3 += layout_x_nest * layout_y_nest ))
 fi
 export ntasks_fv3
 export ntasks_fv3_gfs
