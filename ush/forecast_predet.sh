@@ -301,7 +301,7 @@ FV3_predet(){
   do_sppt=".false."
   do_ca=".false."
   ISEED=0
-  if (( MEMBER > 0 )); then  # these are only applicable for ensemble members
+  #if (( MEMBER > 0 )); then  # these are only applicable for ensemble members
     local imem=${MEMBER#0}
     local base_seed=$((current_cycle*10000 + imem*100))
 
@@ -335,7 +335,7 @@ FV3_predet(){
       n_var_lndp=$(echo "${lndp_var_list}" | wc -w)
     fi
 
-  fi  # end of ensemble member specific options
+  #fi  # end of ensemble member specific options
 
   #--------------------------------------------------------------------------
 
@@ -595,7 +595,7 @@ MOM6_predet(){
 
   # If using stochastic parameterizations, create a seed that does not exceed the
   # largest signed integer
-  if (( MEMBER > 0 )); then  # these are only applicable for ensemble members
+  #if (( MEMBER > 0 )); then  # these are only applicable for ensemble members
     local imem=${MEMBER#0}
     local base_seed=$((current_cycle*10000 + imem*100))
 
@@ -606,7 +606,7 @@ MOM6_predet(){
     if [[ "${DO_OCN_PERT_EPBL:-}" == "YES" ]]; then
       ISEED_EPBL=$((base_seed + 13)),$((base_seed + 14)),$((base_seed + 15)),$((base_seed + 16)),$((base_seed + 17))
     fi
-  fi
+  #fi
 
   # Fix files
   ${NCP} "${FIXgfs}/mom6/${OCNRES}/"* "${DATA}/INPUT/"  # TODO: These need to be explicit
