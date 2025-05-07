@@ -506,8 +506,16 @@ EOF
 fi
 
 if [[ ${DO_CA:-"NO"} = "YES" ]]; then
-  cat >> "${nml_file}" << EOF
+  if [[ "${namelist_mode}" == "global" ]] ; then
+    cat >> "${nml_file}" << EOF
   do_ca      = .true.
+EOF
+  else
+    cat >> "${nml_file}" << EOF
+  do_ca      = .false.
+EOF
+  fi
+  cat >> "${nml_file}" << EOF
   ca_global  = ${ca_global:-".false."}
   ca_sgs     = ${ca_sgs:-".true."}
   nca        = ${nca:-"1"}

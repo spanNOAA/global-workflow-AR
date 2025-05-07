@@ -61,6 +61,8 @@ shift $((OPTIND-1))
 if [[ -z ${env_job} ]]; then
     echo "FATAL [${BASH_SOURCE[0]}]: Must specify a job name with -e"
     exit 1
+else
+    export ENV_JOB=${env_job}
 fi
 
 ##############################################

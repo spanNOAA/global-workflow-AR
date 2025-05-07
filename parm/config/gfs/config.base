@@ -185,15 +185,19 @@ export AERO_ANL_CDUMP="" # When to run aerosol analysis: gdas, gfs, or both
 export WAVE_CDUMP="" # When to include wave suite: gdas, gfs, or both
 export DOBNDPNT_WAVE="NO"
 export DOIBP_WAV="NO" # Option to create point outputs from input boundary points
-export DO_NEST="NO" # Whether to run a global-nested domain
-if [[ "${DO_NEST:-NO}" == "YES" ]] ; then
+export FRAC_GRID=".false."
+if [[ "${ENV_JOB:-fcst}" == "fcst" ]] || [[ "${ENV_JOB:-fcst}" == "arch" ]]; then
+  export DO_NEST="YES"
+else
+  export DO_NEST="NO" # Whether to run a global-nested domain
+fi
+if [[ "${DO_NEST:-NO}" == "YES" ]]; then
   export ntiles=7
   export NEST_OUTPUT_GRID="regional_latlon"
-  export FIXgfs="${HOMEgfs}/fix/nest"
-  export FRAC_GRID=".false."
+  export FIXgfs="${HOMEgfs}/fix/rotate-with-nest"
 else
   export ntiles=6
-  export FRAC_GRID=".true."
+  export FIXgfs="${HOMEgfs}/fix/rotate-no-nest"
 fi
 
 # Set operational resolution
