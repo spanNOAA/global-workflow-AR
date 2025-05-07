@@ -47,7 +47,9 @@ FV3_postdet() {
         done
       done
       for tt in "${tile_files[@]}"; do
-        fv3_restart_files+=("${tt}.nest02.tile${ntiles}.nc")
+	if [[ "${tt}" != "ca_data" ]]; then
+          fv3_restart_files+=("${tt}.nest02.tile${ntiles}.nc")
+	fi
       done
       fv3_restart_files+=("fv_core.res.nest02.nc")
     else
@@ -252,7 +254,9 @@ FV3_out() {
       done
     done
     for tt in "${tile_files[@]}"; do
-      fv3_restart_files+=("${tt}.nest02.tile${ntiles}.nc")
+      if [[ "${tt}" != "ca_data" ]]; then
+        fv3_restart_files+=("${tt}.nest02.tile${ntiles}.nc")
+      fi
     done
     fv3_restart_files+=("fv_core.res.nest02.nc")
   else
