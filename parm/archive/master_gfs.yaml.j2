@@ -27,6 +27,11 @@ datasets:
 {% include "gfs_netcdfa.yaml.j2" %}
 {% endfilter %}
 {% endif %}
+{% if DO_NEST %}
+{% filter indent(width=4) %}
+{% include "gfs_nest.yaml.j2" %}
+{% endfilter %}
+{% endif %}
 {% endif %}
 
 {% if DO_WAVE %}

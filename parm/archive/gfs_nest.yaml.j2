@@ -1,0 +1,9 @@
+gfs_nest:
+    {% set head = "gfs.t" + cycle_HH + "z.nest." %}
+    name: "GFS_NEST"
+    target: "{{ ATARDIR }}/{{ cycle_YMDH }}/gfs_nest.tar"
+    required:
+        {% for fhr in range(FHMIN_GFS, FHMAX_GFS + FHOUT_GFS, FHOUT_GFS) %}
+        - "{{ COM_ATMOS_MASTER | relpath(ROTDIR) }}/{{ head }}grb2f{{ '%03d' % fhr }}"
+        - "{{ COM_ATMOS_MASTER | relpath(ROTDIR) }}/{{ head }}sfluxgrbf{{ '%03d' % fhr }}.grib2"
+        {% endfor %}
